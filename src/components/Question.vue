@@ -13,14 +13,19 @@
     <ul>
       <li v-for="(answer, index) in question.answers" :key="index">
         <input
-          type="radio"
+          type="checkbox"
           v-model="question.correct"
-          :checked="answer.correct === index"
-          :name="'correct-' + question.id"
-          :value="index"
+          :checked="question.correct === index + 1"
+          :name="`correct-${question.id}`"
+          :value="index + 1"
         />
-        <input type="text" v-model="question.answers[index]" />
-        <button @click="deleteAnswer(index)">X</button>
+        <input
+          type="text"
+          v-model="question.answers[index]"
+          v-focus
+          spellcheck="false"
+        />
+        <button @click="deleteAnswer(question.id, index)">X</button>
       </li>
     </ul>
     <button
@@ -34,7 +39,8 @@
 </template>
 
 <script setup>
-import { defineProps, defineEmit, ref, onMounted } from 'vue'
+import { defineProps, ref, onMounted } from "vue";
+import { addAnswer, deleteAnswer, deleteQuestion } from "../useQuiz";
 
 // ------------ PROPS
 
@@ -50,46 +56,26 @@ const open = ref(false);
 
 const validate = (e) => {
   console.log("blur", e.target.value);
-}
+};
 
 const validateBeforeToggle = () => {
-  if (!props.question.correct) {
+  if (!props.question.correct.length) {
     console.warn("Je moet een correct antwoord selecteren");
   } else {
     open.value = !open.value;
   }
-}
-
-// We define emits like this:
-
-const emit = defineEmit(['deleteAnswer', 'deleteQuestion', 'addAnswer'])
-
-const deleteAnswer = (index) => {
-  emit("deleteAnswer", props.question.id, index);
-}
-
-const deleteQuestion = () => {
-  emit("deleteQuestion", props.question.id);
-}
-
-const addAnswer = () => {
-  emit("addAnswer", props.question.id);
-}
+};
 
 // ------------ ELEMENT REF + LIFECYCLE HOOK
 
-const questionInput = ref(null)
+const questionInput = ref(null);
 
 onMounted(() => {
-    if (props.question.question === null) {
-      open.value = true;
-      questionInput.value.focus()
-    }
-})
+  if (props.question.question === null) {
+    open.value = true;
+    questionInput.value.focus();
+  }
+});
 </script>
 
-<style scoped>
-a {
-  color: #42b983;
-}
-</style>
+<style></style>
