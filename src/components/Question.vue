@@ -10,22 +10,9 @@
     </div>
   </div>
   <div v-if="open" class="answers">
-    <ul>
-      <li v-for="(answer, index) in question.answers" :key="index">
-        <input
-          type="checkbox"
-          v-model="question.correct"
-          :checked="question.correct === index + 1"
-          :name="`correct-${question.id}`"
-          :value="index + 1"
-        />
-        <input
-          type="text"
-          v-model="question.answers[index]"
-          v-focus
-          spellcheck="false"
-        />
-        <button @click="deleteAnswer(question.id, index)">X</button>
+    <ul v-if="question.answers.length">
+      <li v-for="(_, index) in question.answers" :key="index">
+        <Answer :question="question" :index="index"/>
       </li>
     </ul>
     <button
@@ -41,7 +28,7 @@
 <script setup>
 import { defineProps, ref, onMounted } from "vue";
 import { addAnswer, deleteAnswer, deleteQuestion } from "../useQuiz";
-import focus from "../directives/focus";
+import Answer from "./Answer.vue";
 
 // ------------ PROPS
 
