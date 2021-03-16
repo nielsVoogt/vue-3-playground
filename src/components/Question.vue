@@ -41,11 +41,15 @@
 <script setup>
 import { defineProps, ref, onMounted } from "vue";
 import { addAnswer, deleteAnswer, deleteQuestion } from "../useQuiz";
+import focus from "../directives/focus";
 
 // ------------ PROPS
 
 const props = defineProps({
-  question: Object,
+  question: {
+    type: Object,
+    required: true,
+  },
 });
 
 // ------------ STATE
