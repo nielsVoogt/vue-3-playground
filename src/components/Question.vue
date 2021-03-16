@@ -1,6 +1,8 @@
 <template>
   <div class="question">
-    <button @click="validateBeforeToggle">toggle</button>
+    <button @click="validateBeforeToggle" class="question-toggle">
+      toggle
+    </button>
     <div class="question-content">
       <div>
         <input type="text" v-model="question.question" ref="questionInput" />
@@ -9,16 +11,21 @@
       <button @click="deleteQuestion">D</button>
     </div>
   </div>
-  <div v-if="open" class="answers">
+  <div v-if="open" class="question-answers">
     <ul v-if="question.answers.length">
-      <li v-for="(_, index) in question.answers" :key="index">
-        <Answer :question="question" :index="index"/>
+      <li
+        v-for="(_, index) in question.answers"
+        :key="index"
+        class="question-answer"
+      >
+        <Answer :question="question" :index="index" />
       </li>
     </ul>
     <button
       @click="addAnswer(question.id)"
       v-if="question.answers.length < 4"
       :disabled="question.question === null"
+      class="add-question"
     >
       Add answer
     </button>
@@ -69,4 +76,54 @@ onMounted(() => {
 });
 </script>
 
-<style></style>
+<style lang="scss">
+.question {
+  display: flex;
+  margin-bottom: 1em;
+
+  .question-toggle {
+    background: #b6b6b6;
+  }
+}
+
+.question-content {
+  display: flex;
+  background: red;
+  width: 100%;
+  margin-left: 1em;
+
+  > div {
+    width: 100%;
+
+    input[type="text"] {
+      padding: 1em;
+      width: 100%;
+    }
+  }
+}
+
+.question-answers {
+  margin-left: 2em;
+  position: relative;
+  margin-top: 1em;
+
+  &::before {
+    content: "";
+    top: 0;
+    bottom: 0;
+    left: -1.5em;
+    width: 0.75em;
+    border-radius: 0.75em;
+    background: #b6b6b6;
+    position: absolute;
+  }
+
+  .add-question {
+    padding: 1em;
+    border: 1px dashed red;
+    width: 100%;
+    border-radius: 0.4em;
+    text-align: left;
+  }
+}
+</style>

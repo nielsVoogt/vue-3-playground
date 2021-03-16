@@ -17,4 +17,9 @@ import { quiz, addQuestion } from "./useQuiz";
 <style lang="scss">
 @import "style/reset";
 @import "style/base";
+
+.app {
+  margin: 0 auto;
+  max-width: 600px;
+}
 </style>
